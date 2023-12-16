@@ -25,6 +25,8 @@ const Header = () => {
             <NavItems />
           </nav>
         </SignedIn>
+        {/*END OF DESKTOP NAV*/}
+        {/*MOBILE NAV*/}
         <div className="flex w-32 justify-end gap-3">
           <SignedIn>
             <UserButton afterSignOutUrl="/" />
@@ -36,6 +38,7 @@ const Header = () => {
             </Button>
           </SignedOut>
         </div>
+        {/* END OF MOBILE NAV*/}
       </div>
     </header>
   );
