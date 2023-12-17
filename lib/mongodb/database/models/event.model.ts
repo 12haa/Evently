@@ -1,10 +1,10 @@
-import { model, models, Schema } from "mongoose";
+import { model, models, Schema, Document } from "mongoose";
 
 export interface IEvent extends Document {
   _id: string;
   title: string;
   description?: string;
-  location?: string;
+  location: string;
   createdAt?: Date;
   imageUrl: string;
   startDateTime: Date;
@@ -34,4 +34,3 @@ const EventSchema = new Schema({
 const Event = models.Event || model("Event", EventSchema);
 
 export default Event;
-//TODO 4 29 54
