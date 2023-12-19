@@ -1,7 +1,6 @@
 "use client";
-import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FieldArray, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -16,31 +15,34 @@ import { Input } from "@/components/ui/input";
 import { eventFormSchema } from "@/lib/validator";
 import * as z from "zod";
 import { eventDefaultValues } from "@/constants";
-import Dropdown from "@/components/shared/Dropdown";
+import Dropdown from "./Dropdown";
 import { Textarea } from "@/components/ui/textarea";
-import { FileUploader } from "@/components/shared/FileUploader";
+import { FileUploader } from "./FileUploader";
+import { useState } from "react";
 import Image from "next/image";
 import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import { Checkbox } from "@/components/ui/checkbox";
+// import { useUploadThing } from '@/lib/uploadthing'
 
-const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username Must be at least 2 characters",
-  }),
-});
+import "react-datepicker/dist/react-datepicker.css";
+import { Checkbox } from "../ui/checkbox";
+import { useRouter } from "next/navigation";
+// import { createEvent, updateEvent } from "@/lib/actions/event.actions"
+// import { IEvent } from "@/lib/database/models/event.model"
+
+//
 type EventFormProps = {
   userId: string;
   type: "Create" | "Update";
 };
 const EventForm = ({ userId, type }: EventFormProps) => {
+  const initialValues = eventDefaultValues;
   const form = useForm<z.infer<typeof eventFormSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: eventDefaultValues,
+    resolver: zodResolver(eventFormSchema),
+    defaultValues: initialValues,
   });
   const [files, setFiles] = useState<File[]>([]);
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: z.infer<typeof eventFormSchema>) {
     console.log(values);
   }
 
@@ -95,7 +97,7 @@ const EventForm = ({ userId, type }: EventFormProps) => {
               <FormItem className="w-full ">
                 <FormControl className="h-72">
                   <Textarea
-                    placeholder="Description"
+                    placeholder="description"
                     {...field}
                     className="textarea rounded-2xl"
                   />
@@ -255,6 +257,8 @@ const EventForm = ({ userId, type }: EventFormProps) => {
                                 Free Ticket
                               </label>
                               <Checkbox
+                                onCheckedChange={field.onChange}
+                                checked={field.value}
                                 id="isFree"
                                 className="mr-2 h-5 w-5 border-2 border-primary-500"
                               />
