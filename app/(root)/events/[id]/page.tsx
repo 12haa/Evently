@@ -7,6 +7,8 @@ import {
 import { formatDateTime } from "@/lib/utils";
 import { SearchParamProps } from "@/types";
 import Image from "next/image";
+import Collection from "@/components/shared/Collection";
+import CheckoutButton from "@/components/shared/CheckoutButton";
 
 const EventDetails = async ({
   params: { id },
@@ -42,20 +44,20 @@ const EventDetails = async ({
                     {event.isFree ? "FREE" : `$${event.price}`}
                   </p>
                   <p className="p-medium-16 rounded-full bg-grey-500/10 px-4 py-2.5 text-grey-500">
-                    {event.category.name}
+                    {event?.category.name}
                   </p>
                 </div>
 
                 <p className="p-medium-18 ml-2 mt-2 sm:mt-0">
                   by{" "}
                   <span className="text-primary-500">
-                    {event.organizer.firstName} {event.organizer.lastName}
+                    {event.organizer?.firstName} {event.organizer?.lastName}
                   </span>
                 </p>
               </div>
             </div>
 
-            {/*<CheckoutButton event={event} />*/}
+            <CheckoutButton event={event} />
 
             <div className="flex flex-col gap-5">
               <div className="flex gap-2 md:gap-3">
@@ -103,15 +105,15 @@ const EventDetails = async ({
       <section className="wrapper my-8 flex flex-col gap-8 md:gap-12">
         <h2 className="h2-bold">Related Events</h2>
 
-        {/*<Collection*/}
-        {/*  data={relatedEvents?.data}*/}
-        {/*  emptyTitle="No Events Found"*/}
-        {/*  emptyStateSubtext="Come back later"*/}
-        {/*  collectionType="All_Events"*/}
-        {/*  limit={3}*/}
-        {/*  page={searchParams.page as string}*/}
-        {/*  totalPages={relatedEvents?.totalPages}*/}
-        {/*/>*/}
+        <Collection
+          data={relatedEvents?.data}
+          emptyTitle="No Events Found"
+          emptyStateSubtext="Come back later"
+          collectionType="All_Events"
+          limit={3}
+          page={searchParams.page as string}
+          totalPages={relatedEvents?.totalPages}
+        />
       </section>
     </>
   );

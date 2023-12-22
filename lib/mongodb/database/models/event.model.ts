@@ -14,6 +14,8 @@ export interface IEvent extends Document {
   url?: string;
   category: { _id: string; name: string };
   organizer: { _id: string; firstName: string; lastName: string };
+  length: number;
+  map: Function;
 }
 
 const EventSchema = new Schema({

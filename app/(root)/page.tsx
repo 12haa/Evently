@@ -52,7 +52,7 @@ export default async function Home() {
         <Collection
           data={events?.data}
           emptyTitle="No Events Found"
-          emptyStateSubText="Come back later"
+          emptyStateSubtext="Come back later"
           collectionType="All_Events"
           limit={6}
           page={1}
