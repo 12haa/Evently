@@ -5,12 +5,18 @@ import Image from "next/image";
 import Collection from "@/components/shared/Collection";
 import { getAllEvents } from "@/lib/actions/event.actions";
 import { query } from "express";
+import Search from "@/components/shared/Search";
+import { SearchParamProps } from "@/types";
+import CategoryFilter from "@/components/shared/CategoryFilter";
 
-export default async function Home() {
+export default async function Home({ searchParams }: SearchParamProps) {
+  const page = Number(searchParams?.page) || 1;
+  const searchText = searchParams?.query as string;
+  const category = searchParams?.category as string;
   const events = await getAllEvents({
-    query: "",
-    category: "",
-    page: 1,
+    query: searchText,
+    category,
+    page,
     limit: 6,
   });
   console.log(events);
@@ -47,7 +53,8 @@ export default async function Home() {
           Trusted By <br /> Thousands of Events
         </h2>
         <div className="flex w-full flex-col gap-5 md:flex-row">
-          Search Category Filter
+          <Search placeholder="Search events" />
+          <CategoryFilter />
         </div>
         <Collection
           data={events?.data}

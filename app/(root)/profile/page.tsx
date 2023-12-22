@@ -4,11 +4,22 @@ import Link from "next/link";
 import Collection from "@/components/shared/Collection";
 import { auth } from "@clerk/nextjs";
 import { getEventsByUser } from "@/lib/actions/event.actions";
+import { getOrdersByUser } from "@/lib/actions/order.actions";
+import { IOrder } from "@/lib/mongodb/database/models/order.model";
+import { SearchParamProps } from "@/types";
 
-const ProfilePage = async () => {
+const ProfilePage = async ({ searchParams }: SearchParamProps) => {
+  const ordersPage = Number(searchParams?.ordersPage) || 1;
+  const eventsPage = Number(searchParams?.ordersPage) || 1;
   const { sessionClaims } = auth();
   const userId = sessionClaims?.userId as string;
-  const organizedEvents = await getEventsByUser({ userId, page: 1 });
+  const organizedEvents = await getEventsByUser({ userId, page: eventsPage });
+  const orders = await getOrdersByUser({ userId, page: ordersPage });
+
+  const orderedEvents =
+    orders?.data.map((orders: IOrder) => {
+      orders.event;
+    }) || [];
   return (
     <>
       {/*My Tickets Section*/}
@@ -21,18 +32,18 @@ const ProfilePage = async () => {
         </div>
       </section>
 
-      {/*<section className="wrapper my-8 ">*/}
-      {/*  <Collection*/}
-      {/*    data={events?.data}*/}
-      {/*    emptyTitle="No Events tickets purchased yet"*/}
-      {/*    emptyStateSubtext="No worries plenty of exiting events to explore ;)"*/}
-      {/*    collectionType="My_Tickets"*/}
-      {/*    limit={3}*/}
-      {/*    page={1}*/}
-      {/*    urlParamName="ordersPage"*/}
-      {/*    totalPages={2}*/}
-      {/*  />*/}
-      {/*</section>*/}
+      <section className="wrapper my-8 ">
+        <Collection
+          data={orderedEvents}
+          emptyTitle="No Events tickets purchased yet"
+          emptyStateSubtext="No worries plenty of exiting events to explore ;)"
+          collectionType="My_Tickets"
+          limit={3}
+          page={ordersPage}
+          urlParamName="ordersPage"
+          totalPages={orders?.totalPages}
+        />
+      </section>
 
       {/*Events Organized*/}
       <section className="bg-primary-50 bg-dotted-pattern bg-cover bg-center py-5 md:py-10">
@@ -51,9 +62,9 @@ const ProfilePage = async () => {
           emptyStateSubtext="Go Create Some Now  ;)"
           collectionType="Events_Organized"
           limit={6}
-          page={1}
+          page={eventsPage}
           urlParamName="eventsPage"
-          totalPages={2}
+          totalPages={organizedEvents?.totalPages}
         />
       </section>
     </>
